@@ -62,6 +62,7 @@
 @property (nonatomic, assign, readwrite) IBOutlet NSTextView *  textView;
 
 - (IBAction)installAction:(id)sender;
+- (IBAction)uninstallAction:(id)sender;
 - (IBAction)getVersionAction:(id)sender;
 - (IBAction)readLicenseAction:(id)sender;
 - (IBAction)writeLicenseAction:(id)sender;
@@ -253,6 +254,21 @@
     [[self.xpcServiceConnection remoteObjectProxyWithErrorHandler:^(NSError * proxyError) {
         [self logError:proxyError];
     }] installHelperToolWithReply:^(NSError * replyError) {
+        if (replyError == nil) {
+            [self logWithFormat:@"success\n"];
+        } else {
+            [self logError:replyError];
+        }
+    }];
+}
+
+- (IBAction)uninstallAction:(id)sender
+{
+    #pragma unused(sender)
+    [self connectToXPCService];
+    [[self.xpcServiceConnection remoteObjectProxyWithErrorHandler:^(NSError * proxyError) {
+        [self logError:proxyError];
+    }] uninstallHelperToolWithReply:^(NSError * replyError) {
         if (replyError == nil) {
             [self logWithFormat:@"success\n"];
         } else {

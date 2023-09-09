@@ -60,6 +60,8 @@
 
 @property (atomic, strong, readwrite) NSXPCConnection *  helperToolConnection;      // only accessed or modified by operations on self.queue
 
+@property (atomic, strong, readwrite) SMAppService *appService;
+
 @end
 
 @implementation XPCService {
@@ -89,6 +91,8 @@
         
         self->_queue = [[NSOperationQueue alloc] init];
         [self->_queue setMaxConcurrentOperationCount:1];
+        
+        self->_appService = [SMAppService daemonServiceWithPlistName:@"HelperTool-Launchd.plist"];
     }
     return self;
 }
@@ -123,22 +127,27 @@
 - (void)installHelperToolWithReply:(void(^)(NSError * error))reply
     // Part of XPCServiceProtocol.  Called by the app to install the helper tool.
 {
-    Boolean             success;
-    CFErrorRef          error;
+    NSError * _Nullable error = nil;
+    BOOL success = [self.appService registerAndReturnError:&error];
     
-    success = SMJobBless(
-        kSMDomainSystemLaunchd,
-        CFSTR("com.example.apple-samplecode.EBAS.HelperTool"),
-        self->_authRef,
-        &error
-    );
-
     if (success) {
         reply(nil);
     } else {
         assert(error != NULL);
-        reply((__bridge NSError *) error);
-        CFRelease(error);
+        reply(error);
+    }
+}
+
+- (void)uninstallHelperToolWithReply:(void (^)(NSError *))reply
+{
+    NSError * _Nullable error = nil;
+    BOOL success = [self.appService unregisterAndReturnError:&error];
+    
+    if (success) {
+        reply(nil);
+    } else {
+        assert(error != NULL);
+        reply(error);
     }
 }
 

@@ -62,6 +62,7 @@
 @property (nonatomic, assign, readwrite) IBOutlet NSTextView *  textView;
 
 - (IBAction)installAction:(id)sender;
+- (IBAction)uninstallAction:(id)sender;
 - (IBAction)getVersionAction:(id)sender;
 - (IBAction)readLicenseAction:(id)sender;
 - (IBAction)writeLicenseAction:(id)sender;
@@ -71,6 +72,7 @@
 
 @property (atomic, copy,   readwrite) NSData *                  authorization;
 @property (atomic, strong, readwrite) NSXPCConnection *         helperToolConnection;
+@property (atomic, strong, readwrite) SMAppService *appService;
 
 @end
 
@@ -107,6 +109,8 @@
     if (self->_authRef) {
         [Common setupAuthorizationRights:self->_authRef];
     }
+    
+    self.appService = [SMAppService daemonServiceWithPlistName:@"HelperTool-Launchd.plist"];
     
     [self.window makeKeyAndOrderFront:self];
 }
@@ -197,26 +201,30 @@
 #pragma mark * IB Actions
 
 - (IBAction)installAction:(id)sender
-    // Called when the user clicks the Install button.  This uses SMJobBless to install 
-    // the helper tool.
 {
     #pragma unused(sender)
-
-    Boolean             success;
-    CFErrorRef          error;
     
-    success = SMJobBless(
-        kSMDomainSystemLaunchd,
-        CFSTR("com.example.apple-samplecode.EBAS.HelperTool"),
-        self->_authRef,
-        &error
-    );
+    NSError * _Nullable error = nil;
+    BOOL success = [self.appService registerAndReturnError:&error];
 
     if (success) {
         [self logWithFormat:@"success\n"];
     } else {
-        [self logError:(__bridge NSError *) error];
-        CFRelease(error);
+        [self logError:error];
+    }
+}
+
+- (IBAction)uninstallAction:(id)sender
+{
+    #pragma unused(sender)
+    
+    NSError * _Nullable error = nil;
+    BOOL success = [self.appService unregisterAndReturnError:&error];
+    
+    if (success) {
+        [self logWithFormat:@"success\n"];
+    } else {
+        [self logError:error];
     }
 }
 

@@ -59,6 +59,9 @@
 - (void)installHelperToolWithReply:(void(^)(NSError * error))reply;
     // Called by the app to install the helper tool.
 
+- (void)uninstallHelperToolWithReply:(void(^)(NSError * error))reply;
+    // Called by the app to install the helper tool.
+
 - (void)setupAuthorizationRights;
     // Called by the app at startup time to set up our authorization rights in the 
     // authorization database.
