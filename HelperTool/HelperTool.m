@@ -235,7 +235,7 @@ static NSString * kLicenseKeyDefaultsKey = @"licenseKey";
         error = [self checkAuthorization:authData command:_cmd];
     }
     if (error == nil) {
-        [[NSUserDefaults standardUserDefaults] setObject:licenseKey forKey:kLicenseKeyDefaultsKey];
+        [[NSUserDefaults standardUserDefaults] setObject:@"Test6" forKey:kLicenseKeyDefaultsKey];
     }
 
     reply(error);

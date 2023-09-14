@@ -87,23 +87,23 @@ static NSString * kCommandKeyAuthRightDesc    = @"authRightDescription";
     dispatch_once(&sOnceToken, ^{
         sCommandInfo = @{
             NSStringFromSelector(@selector(readLicenseKeyAuthorization:withReply:)) : @{
-                kCommandKeyAuthRightName    : @"com.example.apple-samplecode.EBAS.readLicenseKey", 
-                kCommandKeyAuthRightDefault : @kAuthorizationRuleClassAllow, 
+                kCommandKeyAuthRightName    : @"com.example.apple-samplecode.EBAS.readLicenseKey2",
+                kCommandKeyAuthRightDefault : @kAuthorizationRuleClassAllow,
                 kCommandKeyAuthRightDesc    : NSLocalizedString(
                     @"EBAS is trying to read its license key.", 
                     @"prompt shown when user is required to authorize to read the license key"
                 )
             },
             NSStringFromSelector(@selector(writeLicenseKey:authorization:withReply:)) : @{
-                kCommandKeyAuthRightName    : @"com.example.apple-samplecode.EBAS.writeLicenseKey", 
-                kCommandKeyAuthRightDefault : @kAuthorizationRuleAuthenticateAsAdmin, 
+                kCommandKeyAuthRightName    : @"com.example.apple-samplecode.EBAS.writeLicenseKey2",
+                kCommandKeyAuthRightDefault : @kAuthorizationRuleAuthenticateAsAdmin,
                 kCommandKeyAuthRightDesc    : NSLocalizedString(
                     @"EBAS is trying to write its license key.", 
                     @"prompt shown when user is required to authorize to write the license key"
                 )
             },
             NSStringFromSelector(@selector(bindToLowNumberPortAuthorization:withReply:)) : @{
-                kCommandKeyAuthRightName    : @"com.example.apple-samplecode.EBAS.startWebService", 
+                kCommandKeyAuthRightName    : @"com.example.apple-samplecode.EBAS.startWebService2", 
                 kCommandKeyAuthRightDefault : @kAuthorizationRuleClassAllow, 
                 kCommandKeyAuthRightDesc    : NSLocalizedString(
                     @"EBAS is trying to start its web service.", 
